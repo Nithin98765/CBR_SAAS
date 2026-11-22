@@ -162,13 +162,6 @@ CORS_ALLOWED_ORIGINS = [
 
 # Allowed hosts
 
-ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "localhost",
-]
-
-
-
 # Load environment variables
 
 load_dotenv(BASE_DIR / ".env")
@@ -176,6 +169,18 @@ load_dotenv(BASE_DIR / ".env")
 SECRET_KEY = os.getenv("SECRET_KEY", "development-only-secret-key")
 
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+    if host.strip()
+]
+
+CORS_ALLOWED_ORIGINS += [
+    origin.strip()
+    for origin in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
+    if origin.strip()
+]
 
 
 # Database configuration
