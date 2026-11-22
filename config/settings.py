@@ -177,7 +177,9 @@ ALLOWED_HOSTS = [
 ]
 
 CORS_ALLOWED_ORIGINS += [
-    origin.strip()
+    # Browser origins contain only scheme + host + optional port. Render
+    # environment values are sometimes entered with a trailing slash.
+    origin.strip().rstrip("/")
     for origin in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
     if origin.strip()
 ]
