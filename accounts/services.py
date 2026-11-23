@@ -11,13 +11,14 @@ from .models import CustomUser, MobileOTP
 
 
 @transaction.atomic
-def create_pending_user(*, full_name, mobile_number, password):
+def create_pending_user(*, full_name, email, mobile_number, password):
 
     # Create an inactive user account
     user = CustomUser.objects.create_user(
         mobile_number=mobile_number,
         password=password,
         full_name=full_name,
+        email=email,
         is_active=False,
         is_mobile_verified=False,
     )

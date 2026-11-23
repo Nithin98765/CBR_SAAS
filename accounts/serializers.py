@@ -9,6 +9,8 @@ from .models import CustomUser
 class SignupSerializer(serializers.Serializer):
 
     full_name = serializers.CharField(max_length=150)
+    
+    email = serializers.EmailField(max_length=255, required=False, allow_blank=True)
 
     mobile_number = serializers.CharField(max_length=16)
 
@@ -23,6 +25,16 @@ class SignupSerializer(serializers.Serializer):
             raise serializers.ValidationError("Full name is required.")
 
         return value
+    
+    def validate_email(self, value):
+        if value:
+            value = value.strip()
+            if CustomUser.objects.filter(email=value).exists():
+                raise serializers.ValidationError(
+                    "This email address is already registered."
+                )
+        return value
+    
 
     def validate_mobile_number(self, value):
         value = value.strip()
